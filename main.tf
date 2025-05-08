@@ -24,7 +24,7 @@ data "cloudflare_account" "this" {
 resource "cloudflare_zero_trust_organization" "org" {
   account_id = data.cloudflare_account.this.account_id
   allow_authenticate_via_warp = true
-  auth_domain = "test.cloudflareaccess.com"
+  auth_domain = "rjpridgen.cloudflareaccess.com"
   auto_redirect_to_identity = true
   custom_pages = {
     forbidden = "699d98642c564d2e855e9661899b7252"
