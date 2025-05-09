@@ -15,16 +15,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+    # - name: Set up Node.js
+    #   uses: actions/setup-node@v2
+    #   with:
+    #     node-version: '14'
 
-    - name: Install dependencies
-      run: npx bun install
+    # - name: Install dependencies
+    #   run: npx bun install
 
-    - name: Run
-      run: npx bun index.ts
+    # - name: Run
+    #   run: npx bun index.ts
 
     - uses: hashicorp/setup-terraform@v3
 
