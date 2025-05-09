@@ -12,7 +12,7 @@ data "cloudflare_accounts" "this" {
 }
 
 resource "cloudflare_zero_trust_gateway_policy" "example_zero_trust_gateway_policy" {
-  account_id = data.cloudflare_accounts.this.id
+  account_id = data.cloudflare_accounts.this.account_id
   action = "isolate"
   filters = ["http"]
   name = "Isolation"
