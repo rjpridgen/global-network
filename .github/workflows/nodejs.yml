@@ -7,13 +7,11 @@ on:
     branches: [ main ]
 
 jobs:
-  env:
-    CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
-    CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
   build:
-
     runs-on: ubuntu-latest
-
+    env:
+      CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
+      CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
     steps:
     - uses: actions/checkout@v2
 
