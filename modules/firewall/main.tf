@@ -2,17 +2,19 @@ terraform {
   required_providers {
     cloudflare = {
       source = "cloudflare/cloudflare"
-      version = ">= 5.3.0"
+      version = ">= 5.4.0"
     }
   }
 }
 
-data "cloudflare_accounts" "this" {
-  name = "Siguiente"
+variable "account_id" {
+  description = "Cloudflare account ID"
+  type        = string
+  default = "02ee7b87eb8a52627a53b88821c9ae95"
 }
 
-resource "cloudflare_zero_trust_gateway_policy" "example_zero_trust_gateway_policy" {
-  account_id = data.cloudflare_accounts.this.account_id
+resource "cloudflare_zero_trust_gateway_policy" "isolate" {
+  account_id = var.account_id
   action = "isolate"
   filters = ["http"]
   name = "Isolation"
