@@ -1,0 +1,14 @@
+{
+  "name": "global-network",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "cloudflare": "^4.2.0"
+  }
+}
