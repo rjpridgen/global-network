@@ -20,7 +20,7 @@ resource "cloudflare_zero_trust_gateway_policy" "block_filesharing" {
   name = "Filesharing"
   description = "Block all filesharing services for system integrity and security."
   enabled = true
-  filter = "any(dns.content.category[*] in {95})"
+  traffic = "any(dns.content.category[*] in {95})"
   identity = ""
   precedence = 10
   rule_settings = {
