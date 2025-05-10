@@ -26,6 +26,7 @@ jobs:
     - name: Run
       run: npx bun index.ts
 
+
     # - uses: hashicorp/setup-terraform@v3
 
     # - name: Cache Terraform state
