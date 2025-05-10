@@ -15,35 +15,35 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-
-    - name: Install dependencies
-      run: npx bun install
-
-    - name: Run
-      run: npx bun index.ts
-
-
-    # - uses: hashicorp/setup-terraform@v3
-
-    # - name: Cache Terraform state
-    #   uses: actions/cache@v3
+    # - name: Set up Node.js
+    #   uses: actions/setup-node@v2
     #   with:
-    #     path: |
-    #       .terraform
-    #       terraform.tfstate
-    #     key: ${{ runner.os }}-terraform-${{ hashFiles('**/*.tf') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-terraform-
+    #     node-version: '14'
 
-    # - run: terraform init
+    # - name: Install dependencies
+    #   run: npx bun install
 
-    # - id: plan
-    #   run: terraform plan -no-color
+    # - name: Run
+    #   run: npx bun index.ts
 
-    # - name: Apply Terraform
-    #   if: github.ref == 'refs/heads/main'
-    #   run: terraform apply -auto-approve
+
+    - uses: hashicorp/setup-terraform@v3
+
+    - name: Cache Terraform state
+      uses: actions/cache@v3
+      with:
+        path: |
+          .terraform
+          terraform.tfstate
+        key: ${{ runner.os }}-terraform-${{ hashFiles('**/*.tf') }}
+        restore-keys: |
+          ${{ runner.os }}-terraform-
+
+    - run: terraform init
+
+    - id: plan
+      run: terraform plan -no-color
+
+    - name: Apply Terraform
+      if: github.ref == 'refs/heads/main'
+      run: terraform apply -auto-approve
