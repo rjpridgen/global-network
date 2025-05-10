@@ -41,7 +41,7 @@ resource "cloudflare_zero_trust_list" "apple_software" {
 }
 
 resource "cloudflare_zero_trust_gateway_policy" "block_filesharing" {
-  account_id = data.cloudflare_accounts.this.id
+  account_id = data.cloudflare_accounts.this.account_id
   action = "allow"
   filters = ["http"]
   name = "Filesharing"
