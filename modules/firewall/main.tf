@@ -11,8 +11,8 @@ data "cloudflare_accounts" "this" {
   name = "Siguiente"
 }
 
-resource "cloudflare_zero_trust_list" "google" {
-  name = "Google Services"
+resource "cloudflare_zero_trust_list" "allowed_ips" {
+  name = "IP Allow"
   type = "IP"
   account_id = "02ee7b87eb8a52627a53b88821c9ae95"
   items = [
