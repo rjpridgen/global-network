@@ -11,48 +11,113 @@ data "cloudflare_accounts" "this" {
   name = "Siguiente"
 }
 
-resource "cloudflare_zero_trust_list" "apple_software" {
-  name = "Apple Software Updates"
-  type = "DOMAIN"
-  account_id = data.cloudflare_accounts.this.id
+resource "cloudflare_zero_trust_list" "google" {
+  name = "Google Services"
+  type = "IP"
+  account_id = "02ee7b87eb8a52627a53b88821c9ae95"
   items = [
-    { value: "appldnld.apple.com" },
-    { value: "configuration.apple.com" },
-    { value: "gdmf.apple.com" },
-    { value: "gg.apple.com" },
-    { value: "gs.apple.com" },
-    { value: "ig.apple.com" },
-    { value: "mesu.apple.com" },
-    { value: "oscdn.apple.com" },
-    { value: "osrecovery.apple.com" },
-    { value: "skl.apple.com" },
-    { value: "swcdn.apple.com" },
-    { value: "swdist.apple.com" },
-    { value: "swdownload.apple.com" },
-    { value: "swscan.apple.com" },
-    { value: "updates-http.cdn-apple.com" },
-    { value: "updates.cdn-apple.com" },
-    { value: "xp.apple.com" },
-    { value: "gdmf-ados.apple.com" },
-    { value: "gsra.apple.com" },
-    { value: "wkms-public.apple.com" },
-    { value: "fcs-keys-pub-prod.cdn-apple.com" }
+    {value: "8.8.4.0/24"},
+    {value: "8.8.8.0/24"},
+    {value: "8.34.208.0/20"},
+    {value: "8.35.192.0/20"},
+    {value: "23.236.48.0/20"},
+    {value: "23.251.128.0/19"},
+    {value: "34.0.0.0/15"},
+    {value: "34.2.0.0/16"},
+    {value: "34.3.0.0/23"},
+    {value: "34.3.3.0/24"},
+    {value: "34.3.4.0/24"},
+    {value: "34.3.8.0/21"},
+    {value: "34.3.16.0/20"},
+    {value: "34.3.32.0/19"},
+    {value: "34.3.64.0/18"},
+    {value: "34.4.0.0/14"},
+    {value: "34.8.0.0/13"},
+    {value: "34.16.0.0/12"},
+    {value: "34.32.0.0/11"},
+    {value: "34.64.0.0/10"},
+    {value: "34.128.0.0/10"},
+    {value: "35.184.0.0/13"},
+    {value: "35.192.0.0/14"},
+    {value: "35.196.0.0/15"},
+    {value: "35.198.0.0/16"},
+    {value: "35.199.0.0/17"},
+    {value: "35.199.128.0/18"},
+    {value: "35.200.0.0/13"},
+    {value: "35.208.0.0/12"},
+    {value: "35.224.0.0/12"},
+    {value: "35.240.0.0/13"},
+    {value: "57.140.192.0/18"},
+    {value: "64.15.112.0/20"},
+    {value: "64.233.160.0/19"},
+    {value: "66.22.228.0/23"},
+    {value: "66.102.0.0/20"},
+    {value: "66.249.64.0/19"},
+    {value: "70.32.128.0/19"},
+    {value: "72.14.192.0/18"},
+    {value: "74.114.24.0/21"},
+    {value: "74.125.0.0/16"},
+    {value: "104.154.0.0/15"},
+    {value: "104.196.0.0/14"},
+    {value: "104.237.160.0/19"},
+    {value: "107.167.160.0/19"},
+    {value: "107.178.192.0/18"},
+    {value: "108.59.80.0/20"},
+    {value: "108.170.192.0/18"},
+    {value: "108.177.0.0/17"},
+    {value: "130.211.0.0/16"},
+    {value: "136.22.160.0/20"},
+    {value: "136.22.176.0/21"},
+    {value: "136.22.184.0/23"},
+    {value: "136.22.186.0/24"},
+    {value: "136.124.0.0/15"},
+    {value: "142.250.0.0/15"},
+    {value: "146.148.0.0/17"},
+    {value: "152.65.208.0/22"},
+    {value: "152.65.214.0/23"},
+    {value: "152.65.218.0/23"},
+    {value: "152.65.222.0/23"},
+    {value: "152.65.224.0/19"},
+    {value: "162.120.128.0/17"},
+    {value: "162.216.148.0/22"},
+    {value: "162.222.176.0/21"},
+    {value: "172.110.32.0/21"},
+    {value: "172.217.0.0/16"},
+    {value: "172.253.0.0/16"},
+    {value: "173.194.0.0/16"},
+    {value: "173.255.112.0/20"},
+    {value: "192.104.160.0/23"},
+    {value: "192.158.28.0/22"},
+    {value: "192.178.0.0/15"},
+    {value: "193.186.4.0/24"},
+    {value: "199.36.154.0/23"},
+    {value: "199.36.156.0/24"},
+    {value: "199.192.112.0/22"},
+    {value: "199.223.232.0/21"},
+    {value: "207.223.160.0/20"},
+    {value: "208.65.152.0/22"},
+    {value: "208.68.108.0/22"},
+    {value: "208.81.188.0/22"},
+    {value: "208.117.224.0/19"},
+    {value: "209.85.128.0/17"},
+    {value: "216.58.192.0/19"},
+    {value: "216.73.80.0/20"},
+    {value: "216.239.32.0/19"},
+    {value: "216.252.220.0/22"},
+    {value: "2001:4860::/32"},
+    {value: "2404:6800::/32"},
+    {value: "2404:f340::/32"},
+    {value: "2600:1900::/28"},
+    {value: "2605:ef80::/32"},
+    {value: "2606:40::/32"},
+    {value: "2606:73c0::/32"},
+    {value: "2607:1c0:241:40::/60"},
+    {value: "2607:1c0:300::/40"},
+    {value: "2607:f8b0::/32"},
+    {value: "2620:11a:a000::/40"},
+    {value: "2620:120:e000::/40"},
+    {value: "2800:3f0::/32"},
+    {value: "2a00:1450::/32"},
+    {value: "2c0f:fb50::/32"}
   ]
-}
-
-resource "cloudflare_zero_trust_gateway_policy" "block_filesharing" {
-  account_id = data.cloudflare_accounts.this.account_id
-  action = "allow"
-  filters = ["http"]
-  name = "Filesharing"
-  description = "Block all filesharing services for system integrity and security."
-  enabled = true
-  traffic = "http.request.method in {\"GET\" \"POST\" \"PUT\" \"DELETE\" \"PATCH\"}"
-  precedence = 10
-  rule_settings {
-    add_headers = {
-      "HELP" = "ryan jeremy pridgen"
-      "HELP_GEO" = "20.50694,-86.94847"
-    }
-  }
 }
