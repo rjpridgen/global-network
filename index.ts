@@ -7,9 +7,11 @@ const api = new Cloudflare({
 
 const acc = (await api.accounts.list()).result.at(0)!
 
-const gatewayList = await api.zeroTrust.gateway.lists.edit('277c3797-bf0b-4942-afde-9909caf119bc', {
+const gatewayList = await api.zeroTrust.gateway.lists.create({
+    name: "Github IPs",
+    type: "IP",
   account_id: acc.id,
-    append: [
+    items: [
         {"value": "192.30.252.0/22"},
 {"value": "185.199.108.0/22"},
 {"value": "140.82.112.0/20"},
