@@ -7,7 +7,7 @@ const api = new Cloudflare({
 
 const acc = (await api.accounts.list()).result.at(0)!
 
-const gatewayList = await client.zeroTrust.gateway.lists.edit('277c3797-bf0b-4942-afde-9909caf119bc', {
+const gatewayList = await api.zeroTrust.gateway.lists.edit('277c3797-bf0b-4942-afde-9909caf119bc', {
   account_id: acc.id,
     append: [
         {"value": "192.30.252.0/22"},
