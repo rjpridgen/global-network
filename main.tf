@@ -5,6 +5,7 @@ terraform {
 module "zero-trust-firewall" {
   source = "./modules/firewall"
   team = "ryanjeremypridgen"
+  account = "02ee7b87eb8a52627a53b88821c9ae95"
 }
 
 module "global-network" {

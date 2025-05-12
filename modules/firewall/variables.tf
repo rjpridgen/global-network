@@ -1,3 +1,7 @@
 variable "team" {
-  type = string
+    type = string
+}
+
+variable "account" {
+    type = string
 }
