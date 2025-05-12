@@ -2,7 +2,7 @@ terraform {
   required_providers {
     cloudflare = {
       source = "cloudflare/cloudflare"
-      version = ">= 5.4.0"
+      version = "3.4.1"
     }
   }
 }
@@ -14,7 +14,7 @@ data "cloudflare_accounts" "this" {
 resource "cloudflare_zero_trust_list" "cloudflare" {
   name = "Cloudflare Hostnames"
   type = "DOMAIN"
-  account_id = data.cloudflare_accounts.this.id
+  account_id = data.cloudflare_accounts.this.account_id
   items = [
     "cloudflare.com",
     "dash.cloudflare.com",
@@ -32,7 +32,7 @@ resource "cloudflare_zero_trust_list" "cloudflare" {
 resource "cloudflare_zero_trust_list" "cloudflare_ip" {
   name = "Cloudflare IP"
   type = "IP"
-  account_id = data.cloudflare_accounts.this.id
+  account_id = data.cloudflare_accounts.this.account_id
   items = [
     ## WARP Firewall ##
     ## https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/firewall/ ##
