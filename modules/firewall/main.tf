@@ -76,7 +76,7 @@ resource "cloudflare_zero_trust_list" "cloudflare_ip" {
   type = "IP"
   account_id = var.account
   items = [
-    for s in local.local.cloudflare_ip : {
+    for s in local.cloudflare_ip : {
       value = s
     }
   ]
