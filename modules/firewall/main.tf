@@ -7,15 +7,8 @@ terraform {
   }
 }
 
-data "cloudflare_accounts" "this" {
-  name = "Siguiente"
-}
-
-resource "cloudflare_zero_trust_list" "cloudflare" {
-  name = "Cloudflare Hostnames"
-  type = "DOMAIN"
-  account_id = var.account
-  items = [
+locals {
+  cloudflare_hostnames = [
     "cloudflare.com",
     "dash.cloudflare.com",
     "one.dash.cloudflare.com",
@@ -27,14 +20,8 @@ resource "cloudflare_zero_trust_list" "cloudflare" {
     "${var.team}.cloudflareaccess.com",
     "${var.team}.cloudflare-gateway.com"
   ]
-}
 
-resource "cloudflare_zero_trust_list" "cloudflare_ip" {
-  name = "Cloudflare IP"
-  
-  type = "IP"
-  account_id = var.account
-  items = [
+  cloudflare_ip = [
     ## WARP Firewall ##
     ## https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/deployment/firewall/ ##
 
@@ -65,5 +52,32 @@ resource "cloudflare_zero_trust_list" "cloudflare_ip" {
     # WARP Client Connectivity
     "162.159.197.4",
     "2606:4700:102::4"
+  ]
+}
+
+data "cloudflare_accounts" "this" {
+  name = "Siguiente"
+}
+
+resource "cloudflare_zero_trust_list" "cloudflare" {
+  name = "Cloudflare Hostnames"
+  type = "DOMAIN"
+  account_id = var.account
+  items = [
+    for s in local.cloudflare_hostnames : {
+      value = s
+    }
+  ]
+}
+
+resource "cloudflare_zero_trust_list" "cloudflare_ip" {
+  name = "Cloudflare IP"
+  
+  type = "IP"
+  account_id = var.account
+  items = [
+    for s in local.local.cloudflare_ip : {
+      value = s
+    }
   ]
 }
