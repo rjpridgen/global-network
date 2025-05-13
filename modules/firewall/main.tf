@@ -36,13 +36,14 @@ data "http" "amazon_web_services" {
 }
 
 locals {
-  aws_data = [ for response in local.data.http.amazon_web_services : jsondecode(response.body) ]
+  aws_data = [ for response in data.http.amazon_web_services : jsondecode(response.body).ServiceDetails ]
 
-  # amazon_web_services_responses = [
-  #   for response in local.data.http.amazon_web_services: {
-  #     ipv4 = response.body.ServiceDetails.PrivateIpv4DnsNames
-  #   }
-  # ]
+  amazon_web_services_responses = [
+     for response in local.aws_data : {
+	      ipv4 = response.PrivateIpv4DnsNames
+				ipv6 = response.PrivateIpv6DnsNames
+     }
+   ]
 
   github_api_metadata = jsondecode(data.http.github_meta.body)
 }
