@@ -8,8 +8,8 @@ module "zero-trust-firewall" {
   account = "02ee7b87eb8a52627a53b88821c9ae95"
 }
 
-module "global-network" {
-  source = "./modules/network"
-  google_project_id = "siguiente-mexico"
-  google_region = "northamerica-south1"
-}
+# module "global-network" {
+#   source = "./modules/network"
+#   google_project_id = "siguiente-mexico"
+#   google_region = "northamerica-south1"
+# }
