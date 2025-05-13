@@ -39,8 +39,8 @@ locals {
   aws_data = [ for response in data.http.amazon_web_services : jsondecode(response.body).ServiceDetails ]
 
   amazon_web_services_responses = [
-     for response in flatten(local.aws_data) : {
-				ipv4 = response.PrivateIpv4DnsNames
+     for response in local.aws_data : {
+				ipv4 = flatten([for service in response : service.PrivateIpv4DnsNames])
      }
    ]
 
