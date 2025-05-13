@@ -15,7 +15,35 @@ data "http" "github_meta" {
   url = "https://api.github.com/meta"
 }
 
+data "http" "amazon_web_services" {
+  for_each = toset([
+    "https://configuration.private-access.console.amazonaws.com/us-east-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/us-east-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/us-west-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-northeast-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-northeast-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-southeast-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-southeast-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-south-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-south-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ca-central-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/eu-central-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/eu-west-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/eu-west-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/il-central-1.config.json"
+  ])
+  url = each.value
+}
+
 locals {
+  aws_data = [ for response in local.data.http.amazon_web_services : jsondecode(response.body) ]
+
+  # amazon_web_services_responses = [
+  #   for response in local.data.http.amazon_web_services: {
+  #     ipv4 = response.body.ServiceDetails.PrivateIpv4DnsNames
+  #   }
+  # ]
+
   github_api_metadata = jsondecode(data.http.github_meta.body)
 }
 
