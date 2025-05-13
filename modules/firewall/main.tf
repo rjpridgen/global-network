@@ -40,8 +40,7 @@ locals {
 
   amazon_web_services_responses = [
      for response in local.aws_data : {
-				ipv4 = response.PrivateIpv4DnsNames
-				# ipv6 = response.PrivateIpv6DnsNames
+				ipv4 = flatten([for service in response : service.PrivateIpv4DnsNames])
      }
    ]
 
@@ -49,7 +48,7 @@ locals {
 }
 
 resource "cloudflare_zero_trust_list" "github" {
-  for_each = toset(["web", "api", "git", "packages", "pages", "importer", "actions", "actions_macos", "codespaces", "copilot"])
+  for_each = toset(["web", "api", "git", "packages", "pages", "importer", "codespaces", "copilot"])
   name = "Github ${each.value}"
   type = "IP"
   account_id = var.account
