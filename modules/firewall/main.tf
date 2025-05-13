@@ -40,8 +40,8 @@ locals {
 
   amazon_web_services_responses = [
      for response in local.aws_data : {
-	      ipv4 = response.PrivateIpv4DnsNames
-				ipv6 = response.PrivateIpv6DnsNames
+				ipv4 = response.PrivateIpv4DnsNames
+				# ipv6 = response.PrivateIpv6DnsNames
      }
    ]
 
