@@ -15,14 +15,18 @@ data "http" "github_meta" {
   url = "https://api.github.com/meta"
 }
 
+locals {
+  github_api_metadata = jsondecode(data.http.github_meta.body)
+}
+
 resource "cloudflare_zero_trust_list" "github" {
   for_each = toset(["web", "api", "git", "packages", "pages", "importer", "actions", "actions_macos", "codespaces", "copilot"])
   name = "Github ${each.value}"
   type = "IP"
   account_id = var.account
   items = [
-    for s in data.http.github_meta.body[each.value]: {
-      value = s
+    for ip in local.github_api_metadata[each.value]: {
+      value = ip
     }
   ]
 }
