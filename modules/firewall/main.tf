@@ -15,12 +15,40 @@ data "http" "github_meta" {
   url = "https://api.github.com/meta"
 }
 
+data "http" "amazon_web_services" {
+  for_each = toset([
+    "https://configuration.private-access.console.amazonaws.com/us-east-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/us-east-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/us-west-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-northeast-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-northeast-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-southeast-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-southeast-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-south-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ap-south-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/ca-central-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/eu-central-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/eu-west-1.config.json",
+    "https://configuration.private-access.console.amazonaws.com/eu-west-2.config.json",
+    "https://configuration.private-access.console.amazonaws.com/il-central-1.config.json"
+  ])
+  url = each.value
+}
+
 locals {
+  aws_data = [ for response in data.http.amazon_web_services : jsondecode(response.body).ServiceDetails ]
+
+  amazon_web_services_responses = [
+     for response in local.aws_data : {
+				ipv4 = response.PrivateIpv4DnsNames
+     }
+   ]
+
   github_api_metadata = jsondecode(data.http.github_meta.body)
 }
 
 resource "cloudflare_zero_trust_list" "github" {
-  for_each = toset(["web", "api", "git", "packages", "pages", "importer", "actions", "actions_macos", "codespaces", "copilot"])
+  for_each = toset(["web", "api", "git", "packages", "pages", "importer", "codespaces", "copilot"])
   name = "Github ${each.value}"
   type = "IP"
   account_id = var.account
