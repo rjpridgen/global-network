@@ -4,8 +4,29 @@ terraform {
       source = "cloudflare/cloudflare"
       version = "5.4.0"
     }
+    http = {
+      source  = "hashicorp/http"
+      version = "~> 3.5.0"
+    }
   }
 }
+
+data "http" "github_meta" {
+  url = "https://api.github.com/meta"
+}
+
+resource "cloudflare_zero_trust_list" "github" {
+  for_each = toset(["web", "api", "git", "packages", "pages", "importer", "actions", "actions_macos", "codespaces", "copilot"])
+  name = "Github ${each.value}"
+  type = "IP"
+  account_id = var.account
+  items = [
+    for s in data.http.github_meta.body[each.value]: {
+      value = s
+    }
+  ]
+}
+
 
 locals {
   cloudflare_hostnames = [
@@ -72,7 +93,6 @@ resource "cloudflare_zero_trust_list" "cloudflare" {
 
 resource "cloudflare_zero_trust_list" "cloudflare_ip" {
   name = "Cloudflare IP"
-  
   type = "IP"
   account_id = var.account
   items = [

@@ -122,9 +122,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: [terraform-plan]
-    
+    env:
+      CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
+      CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
     steps:
-    # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
 
