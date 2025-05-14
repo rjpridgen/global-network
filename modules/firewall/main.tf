@@ -40,11 +40,14 @@ locals {
   ipv4 = flatten([ for service in local.services : service.PrivateIpv4DnsNames if can(service.PrivateIpv4DnsNames) ])
 }
 
+data "cloudflare_accounts" "this" {
+  name = "Siguiente"
+}
+
 resource "cloudflare_zero_trust_list" "amazon_ipv4" {
-  for_each = toset(local.ipv4)
   name = "Amazon IPv4"
-  description = ""
-  account_id = ""
+  description = "AWS ipv4 DNS"
+  account_id = data.cloudflare_accounts.this.id
   type = "DOMAIN"
   items = [
     for s in local.ipv4 : {
