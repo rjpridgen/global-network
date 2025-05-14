@@ -49,3 +49,19 @@ resource "cloudflare_zero_trust_list" "amazon_ipv4" {
     }
   ]
 }
+
+resource "cloudflare_zero_trust_gateway_policy" "aws_block" {
+  account_id = var.account
+  action = "block"
+  name = "Block AWS"
+  description = "Block direct AWS egress traffic."
+  device_posture = ""
+  enabled = true
+  filters = ["dns"]
+  precedence = 0
+  rule_settings = {
+    block_page_enabled = true
+    block_reason = "This website is a security risk"
+  }
+  traffic = "any(dns.domains[*] in {\"${cloudflare_zero_trust_list.amazon_ipv4.id}\"})"
+}
