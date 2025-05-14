@@ -19,6 +19,6 @@ resource "cloudflare_zero_trust_gateway_policy" "domain_block" {
   description = "Block bad websites based on their host name."
   enabled     = true
   filters     = ["dns"]
-  precedence  = 0
+  precedence  = 10
   traffic = join(" or ", local.condition)
 }
