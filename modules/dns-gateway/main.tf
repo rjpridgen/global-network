@@ -7,7 +7,7 @@ terraform {
 }
 
 locals {
-  block_lists =join(", ", var.domain_block_lists)
+  block_lists = join(", ", var.domain_block_lists)
 }
 
 resource "cloudflare_zero_trust_gateway_policy" "domain_block" {

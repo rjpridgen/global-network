@@ -10,7 +10,6 @@ terraform {
     }
   }
   required_version = ">= 1.11.4"
-
 }
 
 variable "token" {
@@ -24,6 +23,12 @@ provider "cloudflare" {
 
 variable "account" {
   type = string
+}
+
+module "security" {
+  source = "./modules/zero-trust"
+  id = "siguiente-seguridad-testnet1"
+  account_id = var.account
 }
 
 module "aws_dns" {
@@ -43,16 +48,19 @@ module "aws_dns" {
     "eu-west-2",
     "il-central-1"
   ])
-  source = "./modules/amazon-firewall-region"
-  region = each.value
+  source  = "./modules/amazon-firewall-region"
+  region  = each.value
   account = var.account
 }
 
-module "dns" {
-  source = "./modules/dns-gateway"
+module "gateway" {
+  source  = "./modules/dns-gateway"
   account = var.account
-  domain_block_lists = [ for arr in module.aws_dns : arr.traffic_selector ]
+  domain_block_lists = [
+    for arr in module.aws_dns : arr.traffic_selector
+  ]
 }
+
 
 # module "global-network" {
 #   source = "./modules/network"
