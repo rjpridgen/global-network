@@ -25,13 +25,42 @@ variable "account" {
   type = string
 }
 
-module "aws-dns" {
-  for_each = toset(["us-east-1", "us-east-2"])
-  source = "./modules/amazon-firewall-region"
-  region = each.value
-  team = "ryanjeremypridgen"
+module "security" {
+  source = "./modules/zero-trust"
+  id = "siguiente-seguridad-testnet1"
+  account_id = var.account
+}
+
+module "aws_dns" {
+  for_each = toset([
+    "us-east-1",
+    "us-east-2",
+    "us-west-2",
+    "ap-northeast-1",
+    "ap-northeast-2",
+    "ap-southeast-1",
+    "ap-southeast-2",
+    "ap-south-1",
+    "ap-south-2",
+    "ca-central-1",
+    "eu-central-1",
+    "eu-west-1",
+    "eu-west-2",
+    "il-central-1"
+  ])
+  source  = "./modules/amazon-firewall-region"
+  region  = each.value
   account = var.account
 }
+
+module "gateway" {
+  source  = "./modules/dns-gateway"
+  account = var.account
+  domain_block_lists = [
+    for arr in module.aws_dns : arr.traffic_selector
+  ]
+}
+
 
 # module "global-network" {
 #   source = "./modules/network"
