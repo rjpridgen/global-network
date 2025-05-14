@@ -4,6 +4,7 @@
     "": {
       "name": "global-network",
       "dependencies": {
+        "@types/cloudflare": "^3.0.0",
         "cloudflare": "^4.2.0",
       },
       "devDependencies": {
@@ -16,6 +17,8 @@
   },
   "packages": {
     "@types/bun": ["@types/bun@1.2.12", "", { "dependencies": { "bun-types": "1.2.12" } }, "sha512-lY/GQTXDGsolT/TiH72p1tuyUORuRrdV7VwOTOjDOt8uTBJQOJc5zz3ufwwDl0VBaoxotSk4LdP0hhjLJ6ypIQ=="],
+
+    "@types/cloudflare": ["@types/cloudflare@3.0.0", "", { "dependencies": { "cloudflare": "*" } }, "sha512-OaXscUmrUA3RrDzeCYoa51KH4r9jN6sLWGti3TXsO8R59qCHmHbd5sbe/p1yECzFhUxjcZYA2pIWRpImiyBE+A=="],
 
     "@types/node": ["@types/node@18.19.100", "", { "dependencies": { "undici-types": "~5.26.4" } }, "sha512-ojmMP8SZBKprc3qGrGk8Ujpo80AXkrP7G2tOT4VWr5jlr5DHjsJF+emXJz+Wm0glmy4Js62oKMdZZ6B9Y+tEcA=="],
 
