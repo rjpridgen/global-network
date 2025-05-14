@@ -15,7 +15,8 @@ data "http" "this" {
 
 locals {
   config = jsondecode(data.http.this.body)
-  ipv4   = flatten([for service in local.config.ServiceDetails : service.PrivateIpv4DnsNames if can(service.PrivateIpv4DnsNames)])
+  ipv4   = [for service in local.config.ServiceDetails : service.PrivateIpv4DnsNames if can(service.PrivateIpv4DnsNames)]
+  ipv4_domains = [for hostname in flatten(local.ipv4) : hostname if !strcontains(hostname, "*")]
 }
 
 resource "cloudflare_zero_trust_list" "amazon_ipv4" {
@@ -24,7 +25,7 @@ resource "cloudflare_zero_trust_list" "amazon_ipv4" {
   account_id  = var.account
   type        = "DOMAIN"
   items = [
-    for s in local.ipv4 : {
+    for s in local.ipv4_domains : {
       value = s
     }
   ]
