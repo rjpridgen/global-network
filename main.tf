@@ -10,6 +10,7 @@ terraform {
     }
   }
   required_version = ">= 1.11.4"
+
 }
 
 variable "token" {
@@ -25,12 +26,17 @@ variable "account" {
   type = string
 }
 
-module "aws-dns" {
+module "aws_dns" {
   for_each = toset(["us-east-1", "us-east-2"])
   source = "./modules/amazon-firewall-region"
   region = each.value
-  team = "ryanjeremypridgen"
   account = var.account
+}
+
+module "dns" {
+  source = "./modules/dns-gateway"
+  account = var.account
+  domain_block_lists = [ for arr in module.aws_dns : arr.traffic_selector ]
 }
 
 # module "global-network" {
