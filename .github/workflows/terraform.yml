@@ -19,6 +19,7 @@ jobs:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
     env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
       #this is needed since we are running terraform with read-only permissions
@@ -57,7 +58,7 @@ jobs:
       id: tf-plan
       run: |
         export exitcode=0
-        terraform plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
+        terraform plan -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }} -detailed-exitcode -no-color -out tfplan || export exitcode=$?
 
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         

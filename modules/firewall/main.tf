@@ -12,7 +12,6 @@ terraform {
 }
 
 provider "cloudflare" {
-  email = "catscratch8809@gmail.com"
   api_token = var.token
 }
 
