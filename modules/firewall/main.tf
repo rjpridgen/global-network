@@ -47,7 +47,7 @@ data "cloudflare_accounts" "this" {
 resource "cloudflare_zero_trust_list" "amazon_ipv4" {
   name = "Amazon IPv4"
   description = "AWS ipv4 DNS"
-  account_id = data.cloudflare_accounts.this.account_id
+  account_id = data.cloudflare_accounts.this.id
   type = "DOMAIN"
   items = [
     for s in local.ipv4 : {
