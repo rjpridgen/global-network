@@ -10,5 +10,5 @@ const acc = (await api.accounts.list()).result.at(0)!
 for await (const gatewayRule of api.zeroTrust.gateway.rules.list({
   account_id: acc.id
 })) {
-  console.log(gatewayRule.id);
+  console.log(gatewayRule);
 }
