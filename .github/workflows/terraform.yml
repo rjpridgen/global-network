@@ -134,6 +134,7 @@ jobs:
     # Terraform Apply
     - name: Terraform Apply
       run: terraform apply -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }} -auto-approve tfplan
+      continue-on-error: true
 
     - name: Save Terraform State
       id: terraform-state-save
