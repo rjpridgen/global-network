@@ -1,9 +1,15 @@
 terraform {
+  required_providers {
+    cloudflare = {
+      source = "cloudflare/cloudflare"
+      version = "5.4.0"
+    }
+    http = {
+      source  = "hashicorp/http"
+      version = "~> 3.5.0"
+    }
+  }
   required_version = ">= 1.11.4"
-}
-
-variable "account" {
-  type = string
 }
 
 variable "token" {
@@ -11,11 +17,20 @@ variable "token" {
   ephemeral = true
 }
 
-module "zero-trust-firewall" {
-  source = "./modules/firewall"
+provider "cloudflare" {
+  api_token = var.token
+}
+
+variable "account" {
+  type = string
+}
+
+module "aws-dns" {
+  for_each = toset(["us-east-1", "us-east-2"])
+  source = "./modules/amazon-firewall-region"
+  region = each.value
   team = "ryanjeremypridgen"
   account = var.account
-  token = var.token
 }
 
 # module "global-network" {
