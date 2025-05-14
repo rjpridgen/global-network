@@ -11,6 +11,11 @@ terraform {
   }
 }
 
+provider "cloudflare" {
+  email = "catscratch8809@gmail.com"
+  api_token = var.token
+}
+
 data "http" "github_meta" {
   url = "https://api.github.com/meta"
 }
@@ -36,24 +41,18 @@ data "http" "amazon_web_services" {
 }
 
 locals {
-  services = [ for response in data.http.amazon_web_services : jsondecode(response.body).ServiceDetails ]
+  services = flatten([ for response in data.http.amazon_web_services : jsondecode(response.body).ServiceDetails ])
   ipv4 = flatten([ for service in local.services : service.PrivateIpv4DnsNames if can(service.PrivateIpv4DnsNames) ])
-}
-
-data "cloudflare_account" "example_account" {
-  filter {
-    name = "Siguiente"
-  }
 }
 
 resource "cloudflare_zero_trust_list" "amazon_ipv4" {
   name = "Amazon IPv4"
   description = "AWS ipv4 DNS"
-  account_id = data.cloudflare_accounts.this.account_id
+  account_id = var.account
   type = "DOMAIN"
   items = [
     for s in local.ipv4 : {
-      value = tostring(s)
+      value = s
     }
   ]
 }

@@ -5,3 +5,8 @@ variable "team" {
 variable "account" {
     type = string
 }
+
+variable "token" {
+  type = string
+  ephemeral = true
+}
