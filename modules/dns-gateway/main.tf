@@ -7,7 +7,9 @@ terraform {
 }
 
 locals {
-  block_lists = join(", ", var.domain_block_lists)
+  condition = [
+    for id in var.domain_block_lists : "any(dns.domains[*] in {${id}})"
+  ]
 }
 
 resource "cloudflare_zero_trust_gateway_policy" "domain_block" {
@@ -18,7 +20,5 @@ resource "cloudflare_zero_trust_gateway_policy" "domain_block" {
   enabled     = true
   filters     = ["dns"]
   precedence  = 0
-  traffic = join(" or ", [
-    for id in local.block_lists : "any(dns.domains[*] in {${id}})"
-  ])
+  traffic = join(" or ", local.condition)
 }
