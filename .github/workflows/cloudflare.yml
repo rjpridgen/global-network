@@ -24,7 +24,7 @@ jobs:
       run: npx bun install
 
     - name: Run
-      run: npx bun index.ts
+      run: npx bun src/index.ts
 
     # - uses: hashicorp/setup-terraform@v3
 

@@ -7,6 +7,8 @@ const api = new Cloudflare({
 
 const acc = (await api.accounts.list()).result.at(0)!
 
-console.log("policies", await api.zeroTrust.access.policies.list({
-    account_id: acc.id,
-}))
+for await (const gatewayRule of api.zeroTrust.gateway.rules.list({
+  account_id: acc.id
+})) {
+  console.log(gatewayRule.id);
+}
