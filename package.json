@@ -9,6 +9,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@types/cloudflare": "^3.0.0",
     "cloudflare": "^4.2.0"
   }
 }
