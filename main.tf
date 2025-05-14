@@ -9,6 +9,9 @@ terraform {
       version = "~> 3.5.0"
     }
   }
+  backend "local" {
+    path = ".terraform/terraform.tfstate"
+  }
   required_version = ">= 1.11.4"
 }
 
