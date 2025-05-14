@@ -8,7 +8,7 @@ terraform {
 
 locals {
   condition = [
-    for id in var.domain_block_lists : "any(dns.domains[*] in ${"$"}${id}})"
+    for id in var.domain_block_lists : "any(dns.domains[*] in ${"$"}${id})"
   ]
 }
 
