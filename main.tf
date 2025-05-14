@@ -60,7 +60,7 @@ module "gateway" {
   source  = "./modules/dns-gateway"
   account = var.account
   domain_block_lists = [
-    for arr in module.aws_dns : arr.traffic_selector
+    for arr in module.aws_dns : arr.list_id
   ]
 }
 
