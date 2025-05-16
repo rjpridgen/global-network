@@ -59,6 +59,9 @@ jobs:
         path: .tfstate
         key: ${{ runner.os }}-tfstate
 
+    - name: Terraform Refresh
+      run: terraform refresh -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }}
+
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
     - name: Terraform Plan
