@@ -34,6 +34,25 @@ module "security" {
   account_id = var.account
 }
 
+module "github_dns" {
+  for_each = toset([
+    "hooks",
+    "web",
+    "api",
+    "git",
+    "packages",
+    "pages",
+    "importer",
+    "actions",
+    "codespaces",
+    "dependabot",
+    "copilot"
+  ])
+  source = "./modules/github-firewall"
+  account_id = var.account
+  category = each.value
+}
+
 module "aws_dns" {
   for_each = toset([
     "us-east-1",

@@ -53,29 +53,17 @@ jobs:
     - name: Terraform Init
       run: terraform init
 
-    - name: Restore Terraform State
-      id: terraform-state-restore
-      uses: actions/cache/restore@v4
+    - name: Download Terraform State
+      uses: actions/download-artifact@v4
+      continue-on-error: true
       with:
-        path: .terraform
-        key: ${{ runner.os }}-terraform
+        name: tfstate
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
     - name: Terraform Plan
       id: tf-plan
-      run: |
-        export exitcode=0
-        terraform plan -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }} -detailed-exitcode -no-color -out tfplan || export exitcode=$?
-
-        echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
-        
-        if [ $exitcode -eq 1 ]; then
-          echo Terraform Plan Failed!
-          exit 1
-        else 
-          exit 0
-        fi
+      run: terraform plan -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }} -out tfplan
 
     # Save plan to artifacts  
     - name: Publish Terraform Plan
@@ -83,7 +71,7 @@ jobs:
       with:
         name: tfplan
         path: tfplan
-                
+
   terraform-apply:
     name: 'Terraform Apply'
     if: github.ref == 'refs/heads/main' && needs.terraform-plan.outputs.tfplanExitCode == 2
@@ -118,27 +106,24 @@ jobs:
     - name: Terraform Init
       run: terraform init
 
-    - name: Restore Terraform State
-      id: terraform-state-restore
-      uses: actions/cache/restore@v4
-      with:
-        path: .terraform
-        key: ${{ runner.os }}-terraform
-
     # Download saved plan from artifacts  
     - name: Download Terraform Plan
       uses: actions/download-artifact@v4
       with:
         name: tfplan
 
+    - name: Download Terraform State
+      uses: actions/download-artifact@v4
+      with:
+        name: tfstate
+
     # Terraform Apply
     - name: Terraform Apply
       run: terraform apply -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }} -auto-approve tfplan
       continue-on-error: true
 
-    - name: Save Terraform State
-      id: terraform-state-save
-      uses: actions/cache/save@v4
+    - name: Publish Terraform State
+      uses: actions/upload-artifact@v4
       with:
-        path: .terraform
-        key: ${{ steps.terraform-state-restore.outputs.cache-primary-key }}
+        name: tfstate
+        path: .terraform/terraform.tfstate

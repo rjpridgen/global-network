@@ -14,7 +14,7 @@ data "http" "this" {
 }
 
 locals {
-  config = jsondecode(data.http.this.body)
+  config = jsondecode(data.http.this.response_body)
   ipv4   = [for service in local.config.ServiceDetails : service.PrivateIpv4DnsNames if can(service.PrivateIpv4DnsNames)]
   ipv4_domains = [for hostname in flatten(local.ipv4) : hostname if !strcontains(hostname, "*")]
 }
