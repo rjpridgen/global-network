@@ -122,13 +122,6 @@ jobs:
 
     - name: Terraform Refresh
       run: terraform refresh -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }}
-    
-    - name: Cache Primes
-      id: cache-primes
-      uses: actions/cache@v4
-      with:
-        path: prime-numbers
-        key: ${{ runner.os }}-primes
 
     # Download saved plan from artifacts  
     - name: Download Terraform Plan
@@ -145,7 +138,7 @@ jobs:
 
     # Terraform Apply
     - name: Terraform Apply
-      run: terraform apply -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }} -auto-approve tfplan
+      run: terraform apply -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }} -auto-approve
       continue-on-error: true
 
     - name: Publish Terraform State
