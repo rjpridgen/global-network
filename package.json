@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/cloudflare": "^3.0.0",
-    "cloudflare": "^4.2.0"
+    "cloudflare": "^4.2.0",
+    "jsrsasign": "^11.1.0"
   }
 }
