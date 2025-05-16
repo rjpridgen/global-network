@@ -43,7 +43,6 @@ module "github_dns" {
     "packages",
     "pages",
     "importer",
-    "actions",
     "codespaces",
     "dependabot",
     "copilot"
