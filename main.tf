@@ -10,7 +10,7 @@ terraform {
     }
   }
   backend "local" {
-    path = ".terraform/terraform.tfstate"
+    path = ".tfstate/terraform.tfstate"
   }
   required_version = ">= 1.11.4"
 }
@@ -43,7 +43,6 @@ module "github_dns" {
     "packages",
     "pages",
     "importer",
-    "actions",
     "codespaces",
     "dependabot",
     "copilot"
