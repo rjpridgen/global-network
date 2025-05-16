@@ -52,11 +52,12 @@ jobs:
     - name: Terraform Init
       run: terraform init
 
-    - name: Download Terraform State
-      uses: actions/download-artifact@v4
-      continue-on-error: true
+    - name: Cache Terraform
+      id: cache-tf
+      uses: actions/cache@v4
       with:
-        name: tfstate
+        path: .tfstate
+        key: ${{ runner.os }}-tfstate
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -114,7 +115,17 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: terraform init --reconfigure
+
+    - name: Terraform Refresh
+      run: terraform refresh -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }}
+    
+    - name: Cache Primes
+      id: cache-primes
+      uses: actions/cache@v4
+      with:
+        path: prime-numbers
+        key: ${{ runner.os }}-primes
 
     # Download saved plan from artifacts  
     - name: Download Terraform Plan
@@ -122,11 +133,12 @@ jobs:
       with:
         name: tfplan
 
-    - name: Download Terraform State
-      uses: actions/download-artifact@v4
-      continue-on-error: true
+    - name: Cache Terraform
+      id: cache-tf
+      uses: actions/cache@v4
       with:
-        name: tfstate
+        path: .tfstate
+        key: ${{ runner.os }}-tfstate
 
     # Terraform Apply
     - name: Terraform Apply
