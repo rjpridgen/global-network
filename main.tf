@@ -80,6 +80,9 @@ module "gateway" {
   domain_block_lists = [
     for arr in module.aws_dns : arr.list_id
   ]
+  ip_allow_lists = [
+    for lst in module.github_dns : lst.group_id
+  ]
 }
 
 

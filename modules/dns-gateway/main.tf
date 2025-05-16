@@ -22,3 +22,16 @@ resource "cloudflare_zero_trust_gateway_policy" "domain_block" {
   precedence  = 10
   traffic = join(" or ", local.condition)
 }
+
+resource "cloudflare_zero_trust_gateway_policy" "allow" {
+  account_id  = var.account
+  action      = "allow"
+  name        = "IP Allow"
+  description = "Allow IP list access."
+  enabled     = true
+  filters     = ["dns"]
+  precedence  = 20
+  traffic = join(" or ", [
+    for id in var.ip_allow_lists : "any(net.dst.ip[*] in ${"$"}${id})"
+  ])
+}

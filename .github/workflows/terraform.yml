@@ -50,17 +50,14 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: terraform init --reconfigure
 
-    - name: Cache Terraform
-      id: cache-tf
-      uses: actions/cache@v4
+    - name: Restore Terraform
+      id: tf-restore
+      uses: actions/cache/restore@v4
       with:
         path: .tfstate
-        key: ${{ runner.os }}-tfstate
-
-    - name: Terraform Refresh
-      run: terraform refresh -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }}
+        key: ${{ runner.os }}-${{ hashFiles('**/.tfstate') }}
 
     # Generates an execution plan for Terraform
     # An exit code of 0 indicated no changes, 1 a terraform failure, 2 there are pending changes.
@@ -86,6 +83,13 @@ jobs:
         name: tfplan
         path: tfplan
 
+    - name: Save Terraform
+      id: tf-save
+      uses: actions/cache/save@v4
+      with:
+        path: .tfstate
+        key: ${{ steps.tf-restore.outputs.cache-primary-key }}
+
   terraform-apply:
     name: 'Terraform Apply'
     if: github.ref == 'refs/heads/main'
@@ -110,6 +114,13 @@ jobs:
       with:
         version: '>= 363.0.0'
 
+    - name: Restore Terraform
+      id: tf-restore
+      uses: actions/cache/restore@v4
+      with:
+        path: .tfstate
+        key: ${{ runner.os }}-${{ hashFiles('**/.tfstate') }}
+
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
@@ -118,10 +129,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init --reconfigure
-
-    - name: Terraform Refresh
-      run: terraform refresh -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }}
+      run: terraform init
 
     # Download saved plan from artifacts  
     - name: Download Terraform Plan
@@ -129,20 +137,14 @@ jobs:
       with:
         name: tfplan
 
-    - name: Cache Terraform
-      id: cache-tf
-      uses: actions/cache@v4
-      with:
-        path: .tfstate
-        key: ${{ runner.os }}-tfstate
-
     # Terraform Apply
     - name: Terraform Apply
-      run: terraform apply -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }} -auto-approve
+      run: terraform apply -var token=${{ env.CLOUDFLARE_API_TOKEN }} -var account=${{ env.CLOUDFLARE_ACCOUNT_ID }} -auto-approve tfplan
       continue-on-error: true
 
-    - name: Publish Terraform State
-      uses: actions/upload-artifact@v4
+    - name: Save Terraform
+      id: tf-save
+      uses: actions/cache/save@v4
       with:
-        name: tfstate
-        path: .terraform/terraform.tfstate
+        path: .tfstate
+        key: ${{ steps.tf-restore.outputs.cache-primary-key }}
