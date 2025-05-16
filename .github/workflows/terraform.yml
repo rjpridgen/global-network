@@ -101,6 +101,7 @@ jobs:
       uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: "1.11.4"
+        terraform_wrapper: false
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -114,6 +115,7 @@ jobs:
 
     - name: Download Terraform State
       uses: actions/download-artifact@v4
+      continue-on-error: true
       with:
         name: tfstate
 
